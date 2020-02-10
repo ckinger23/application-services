@@ -399,6 +399,25 @@ impl RemergeDb {
         // XXX FIXME: this is obviously wrong, but should work for
         // extension-storage / engines that don't do deduping. (Is it correct
         // that ext-storage won't want to dedupe on anything?)
+
+        // use crate::JsonValue;
+        // let json_record: JsonValue = _record.clone().into_val();
+        // println!("THIS! {}", json_record["hostname"]);
+
+        let dedupe_field_indexes = self.info.local.dedupe_on.as_slice();
+        let mut dedupe_fields = Vec::new();
+
+        for (key, val) in self.info.local.field_map.iter() {
+            if dedupe_field_indexes.contains(val) {
+                dedupe_fields.push(key);
+            }
+        }
+
+        // TODO:
+        // - call get_all to get all local reacords
+        // - iterate through them to check the dedupe fields against the json_record
+        // - return true if dupes are found
+
         Ok(false)
     }
 }

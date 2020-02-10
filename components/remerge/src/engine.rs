@@ -159,6 +159,21 @@ mod test {
     }
 
     #[test]
+    fn test_duplicate_insert() {
+        let e: RemergeEngine = RemergeEngine::open_in_memory(&*SCHEMA).unwrap();
+        let id = e
+            .insert(json!({
+                "username": "test2",
+                "password": "p4ssw0rd2",
+                "origin": "https://www.example2.com",
+                "formActionOrigin": "https://login.example2.com",
+            }))
+            .unwrap();
+        assert!(e.exists(&id).unwrap());
+        let r = e.get(&id).unwrap().expect("should exist");
+    }
+
+    #[test]
     fn test_list_delete() {
         let e: RemergeEngine = RemergeEngine::open_in_memory(&*SCHEMA).unwrap();
         let id = e
